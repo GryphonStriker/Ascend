@@ -32,6 +32,62 @@ textarea{background:#141b30;color:#f1f1ff;border:1px solid #343c59;border-radius
 .milestone-track{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.level-milestone{background:#1a2239;border:1px solid #3a4562;border-radius:14px;padding:14px;text-align:center}.level-milestone.unlocked{border-color:#8572d9;background:#292747}.milestone-icon{font-size:27px;margin-bottom:6px}.milestone-level{font-size:12px;color:#b2b9d0}.milestone-name{font-weight:700;margin:7px 0;font-size:14px}.milestone-status{font-size:12px;color:#aeb8d3}.level-milestone.unlocked .milestone-status{color:#b9aaff}
 @media(max-width:800px){.progression-layout{grid-template-columns:1fr}.milestone-track{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:420px){.radar-legend{grid-template-columns:1fr}}
+
+/* v0.6.3: compact, safe-area-aware mobile actions and forms */
+.modal-backdrop{padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));overscroll-behavior:contain}
+.modal{display:flex;flex-direction:column;max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow:hidden;min-height:0}
+.modal>h2,.modal>p{flex-shrink:0}
+.modal>form{display:flex;flex-direction:column;min-height:0;overflow:hidden;flex:0 1 auto}
+.modal>form>.field-grid{overflow-y:auto;overscroll-behavior:contain;min-height:0;flex:0 1 auto;padding:2px 4px 6px 2px;margin:8px -4px 0 -2px;-webkit-overflow-scrolling:touch}
+.modal>form>.modal-actions{flex-shrink:0;margin-top:12px;padding-top:12px;border-top:1px solid #35405d;background:#19213a}
+.modal input,.modal select,.modal textarea{max-width:100%;min-width:0}
+@media(max-width:760px){
+ .dashboard-character-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:8px;margin-top:4px}
+ .dashboard-character-actions button{width:100%;min-width:0;white-space:normal;min-height:44px}
+ .dashboard-character-head{align-items:flex-start}
+ .dashboard-character-info{min-width:0;flex:1}
+ .dashboard-character-info h2{overflow-wrap:anywhere;font-size:clamp(17px,5vw,23px)}
+ .dashboard-plan-head{align-items:flex-start}
+ .dashboard-plan-head button{min-height:44px}
+ .modal-backdrop{align-items:center;padding:10px 10px max(12px,env(safe-area-inset-bottom))}
+ .modal{width:100%;padding:16px;max-height:calc(100dvh - 20px - env(safe-area-inset-bottom));border-radius:18px}
+ .modal h2{font-size:21px}
+ .modal>p.small{font-size:12px;line-height:1.4;margin-bottom:8px}
+ .modal .field-grid{gap:11px}
+ .modal label{gap:5px}
+ .modal input,.modal select,.modal textarea{min-height:44px;font-size:16px}
+ .modal-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .modal-actions button{min-width:0;min-height:44px;padding:10px 8px}
+ .modal>form:not(:has(.field-grid)){overflow-y:auto;overscroll-behavior:contain}
+ .modal>form:not(:has(.field-grid))>.modal-actions{position:sticky;bottom:0}
+ .character-hero>.avatar-actions{max-width:100%}
+ .character-hero>button{min-height:44px}
+}
+@media(max-width:390px){.quicklinks button{padding:7px 5px;font-size:11px}.topbar{gap:5px}.topbar-left{gap:5px}.topbar .brand{font-size:16px}}
+
+/* v0.6.4: prevent iOS intrinsic input sizing and align mobile actions */
+html,body{max-width:100%;overflow-x:clip}
+.layout main,.card,.field-grid,.field-grid>label,.modal,.modal>form{min-width:0;max-width:100%}
+.modal .field-grid{width:100%;min-width:0;overflow-x:hidden}
+.modal .field-grid>label{min-width:0;max-width:100%;overflow:hidden}
+.modal input[type="date"],.modal input[type="time"]{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;-webkit-appearance:none;appearance:none;overflow:hidden}
+.modal input[type="date"]::-webkit-date-and-time-value,.modal input[type="time"]::-webkit-date-and-time-value{min-width:0;text-align:left}
+@media(max-width:760px){
+ .dashboard-character-head{display:flex;flex-direction:column;align-items:stretch;gap:14px}
+ .dashboard-character-info{width:100%;flex:initial;align-items:center;flex-wrap:nowrap}
+ .dashboard-character-info>div:last-child{min-width:0;flex:1}
+ .dashboard-character-info p{margin-bottom:8px}
+ .dashboard-character-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;margin:0 0 15px}
+ .dashboard-character-actions button{display:block;width:100%;padding:11px 8px;line-height:1.25}
+ .dashboard-plan-head{display:flex;flex-direction:column;align-items:stretch;gap:10px}
+ .dashboard-plan-head h3{margin:0}
+ .dashboard-plan-head button{width:100%;min-height:44px}
+ #quickAdd{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;width:100%;margin-top:12px}
+ #quickAdd input,#quickAdd button{width:100%;min-width:0;min-height:44px}
+ #plannerNew{min-height:44px}
+ .modal .field-grid{grid-template-columns:minmax(0,1fr)}
+ .modal .field-grid input,.modal .field-grid select{width:100%;min-width:0;max-width:100%}
+}
 </style></head><body><header class="topbar"><div class="topbar-left"><button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="sideMenu">☰</button><div class="brand">✦ ASCEND</div></div><div class="quicklinks"><button class="quick-nav active" data-tab="dashboard">Dashboard</button><button class="quick-nav" data-tab="daily">Today</button><button class="quick-nav" data-tab="tasks">Tasks</button></div></header><div class="layout menu-closed" id="layout"><aside id="sideMenu"><div class="nav-section">Planner</div><div class="links"><button class="nav active" data-tab="dashboard">◈ Dashboard</button><button class="nav" data-tab="daily">◷ Today</button><button class="nav" data-tab="tasks">☑ Tasks</button><button class="nav" data-tab="weekly">▦ Week</button><div class="nav-section">Progression</div><button class="nav" data-tab="quests">⚑ Quests</button><button class="nav" data-tab="character">♜ Character</button><button class="nav" data-tab="achievements">🏆 Achievements</button><button class="nav" data-tab="skills">✧ Skills</button><button class="nav" data-tab="attributes">⬡ Attributes</button><div class="nav-section">Data</div><button class="nav" data-tab="history">◷ History &amp; Saves</button></div></aside><main id="app"></main></div><div id="menuScrim" class="menu-scrim hidden"></div><div id="toast" class="toast"></div><div id="modalRoot"></div><script>
 
 const KEY='ascend-rpg-v01';
@@ -234,7 +290,7 @@ function render(){
  }else if(tab==='dashboard'){
  const active=state.tasks.filter(t=>!t.done).sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999'));
  const count=progressionStats().tasks;
- app.innerHTML=header('Your Adventure','Every real-world accomplishment moves you forward.')+`<div class="card"><div class="flex between"><div class="flex"><div class="avatar-mark" style="height:64px;width:64px;font-size:30px">${portraitMarkup()}</div><div><p class="muted">CHARACTER</p><h2>${esc(state.name)} · Level ${level(state.xp)}</h2><p class="quest-reward">${esc(state.equippedTitle||'')}</p></div></div><button class="secondary" id="rename">Rename</button><button class="secondary" id="goCharacter">Character Sheet</button></div>${progress(state.xp)}</div><div class="card"><div class="flex between"><h3>Today’s Plan</h3><button class="secondary" id="goDaily">Open Today</button></div><p class="muted small">${dayTasks(localToday()).length} tasks due or flexible today · ${completedOn(localToday())} completed today</p></div><div class="grid"><div class="card"><p class="muted">Task completions</p><div class="stat">${count}</div></div><div class="card"><p class="muted">Skills</p><div class="stat">${state.skills.length}</div></div><div class="card"><p class="muted">Total XP</p><div class="stat">${state.xp}</div></div></div><div class="card"><h3>Next Tasks</h3>${active.slice(0,5).map(taskRow).join('')||'<p class="muted">No active tasks. Add your first task!</p>'}<p><button class="secondary" id="goTasks">Manage tasks</button></p></div><div class="card"><h3>Attributes</h3><div class="grid">${state.attributes.map(a=>`<div><strong>${esc(a.name)}</strong><p class="muted small">Level ${level(a.xp)}</p>${progress(a.xp)}</div>`).join('')}</div></div>`;
+ app.innerHTML=header('Your Adventure','Every real-world accomplishment moves you forward.')+`<div class="card"><div class="flex between dashboard-character-head"><div class="flex dashboard-character-info"><div class="avatar-mark" style="height:64px;width:64px;font-size:30px">${portraitMarkup()}</div><div><p class="muted">CHARACTER</p><h2>${esc(state.name)} · Level ${level(state.xp)}</h2><p class="quest-reward">${esc(state.equippedTitle||'')}</p></div></div><div class="dashboard-character-actions"><button class="secondary" id="rename">Rename</button><button class="secondary" id="goCharacter">Character Sheet</button></div></div>${progress(state.xp)}</div><div class="card"><div class="flex between dashboard-plan-head"><h3>Today’s Plan</h3><button class="secondary" id="goDaily">Open Today</button></div><p class="muted small">${dayTasks(localToday()).length} tasks due or flexible today · ${completedOn(localToday())} completed today</p></div><div class="grid"><div class="card"><p class="muted">Task completions</p><div class="stat">${count}</div></div><div class="card"><p class="muted">Skills</p><div class="stat">${state.skills.length}</div></div><div class="card"><p class="muted">Total XP</p><div class="stat">${state.xp}</div></div></div><div class="card"><h3>Next Tasks</h3>${active.slice(0,5).map(taskRow).join('')||'<p class="muted">No active tasks. Add your first task!</p>'}<p><button class="secondary" id="goTasks">Manage tasks</button></p></div><div class="card"><h3>Attributes</h3><div class="grid">${state.attributes.map(a=>`<div><strong>${esc(a.name)}</strong><p class="muted small">Level ${level(a.xp)}</p>${progress(a.xp)}</div>`).join('')}</div></div>`;
  }else if(tab==='tasks'){
  const active=state.tasks.filter(t=>!t.done).sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999'));
  const completed=state.tasks.filter(t=>t.done);
@@ -248,9 +304,10 @@ function render(){
  }
  bind();
 }
-function closeModal(){document.getElementById('modalRoot').innerHTML=''}
+function closeModal(){document.getElementById('modalRoot').innerHTML='';document.body.style.overflow=''}
 function showModal(content){
  const root=document.getElementById('modalRoot');
+ document.body.style.overflow='hidden';
  root.innerHTML=`<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true">${content}</section></div>`;
  root.querySelectorAll('[data-close-modal]').forEach(b=>b.onclick=closeModal);
  root.querySelector('.modal-backdrop').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
