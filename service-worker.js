@@ -1,5 +1,5 @@
 // Ascend app shell only. Character saves remain in browser localStorage.
-const CACHE = 'ascend-shell-v0.6.4';
+const CACHE = 'ascend-shell-v0.6.5';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));

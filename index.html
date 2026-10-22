@@ -88,6 +88,27 @@ html,body{max-width:100%;overflow-x:clip}
  .modal .field-grid{grid-template-columns:minmax(0,1fr)}
  .modal .field-grid input,.modal .field-grid select{width:100%;min-width:0;max-width:100%}
 }
+
+/* v0.6.5: Prevent CSS grid rows from shrinking inside the scrollable modal.
+   The scroll region must scroll its contents, never squash form controls. */
+.modal>form>.field-grid{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  align-content:start;
+  grid-auto-rows:max-content;
+  -webkit-overflow-scrolling:touch;
+}
+.modal .field-grid>label{
+  overflow:visible;
+  min-height:max-content;
+  align-self:start;
+}
+.modal .field-grid input,.modal .field-grid select,.modal .field-grid textarea{
+  flex-shrink:0;
+}
+.modal>form>.modal-actions{flex:0 0 auto}
 </style></head><body><header class="topbar"><div class="topbar-left"><button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="sideMenu">☰</button><div class="brand">✦ ASCEND</div></div><div class="quicklinks"><button class="quick-nav active" data-tab="dashboard">Dashboard</button><button class="quick-nav" data-tab="daily">Today</button><button class="quick-nav" data-tab="tasks">Tasks</button></div></header><div class="layout menu-closed" id="layout"><aside id="sideMenu"><div class="nav-section">Planner</div><div class="links"><button class="nav active" data-tab="dashboard">◈ Dashboard</button><button class="nav" data-tab="daily">◷ Today</button><button class="nav" data-tab="tasks">☑ Tasks</button><button class="nav" data-tab="weekly">▦ Week</button><div class="nav-section">Progression</div><button class="nav" data-tab="quests">⚑ Quests</button><button class="nav" data-tab="character">♜ Character</button><button class="nav" data-tab="achievements">🏆 Achievements</button><button class="nav" data-tab="skills">✧ Skills</button><button class="nav" data-tab="attributes">⬡ Attributes</button><div class="nav-section">Data</div><button class="nav" data-tab="history">◷ History &amp; Saves</button></div></aside><main id="app"></main></div><div id="menuScrim" class="menu-scrim hidden"></div><div id="toast" class="toast"></div><div id="modalRoot"></div><script>
 
 const KEY='ascend-rpg-v01';
