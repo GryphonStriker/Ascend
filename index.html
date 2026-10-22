@@ -1,0 +1,397 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ascend — RPG Planner</title><meta name="theme-color" content="#11172a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Ascend"><meta name="description" content="A local-first RPG productivity planner."><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png"><style>
+:root{font-family:Inter,system-ui,Segoe UI,sans-serif;color:#e9eaf5;background:#0c1020}*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;background:#765de0;color:white}button:hover{filter:brightness(1.13)}button:disabled{opacity:.45;cursor:not-allowed;filter:none}button.secondary{background:#272e46}button.danger{background:#65313e}input,select{background:#141b30;color:#f1f1ff;border:1px solid #343c59;border-radius:9px;padding:11px;min-width:0}h1,h2,h3,p{margin-top:0}.shell{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:100vh}aside{background:#11172a;padding:26px 18px;border-right:1px solid #29314a}.brand{font-size:23px;font-weight:800;margin-bottom:30px;color:#b8a7ff}.nav{display:block;width:100%;text-align:left;margin:8px 0;background:transparent;color:#aeb7d3}.nav.active{background:#2d2852;color:white}main{max-width:1100px;width:100%;margin:0 auto;padding:34px}.muted{color:#a0abc7}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.card{background:#151c30;border:1px solid #2b3551;border-radius:16px;padding:20px;margin-bottom:18px}.stat{font-size:28px;font-weight:800}.bar{height:10px;background:#303950;border-radius:20px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#7760df,#3ac2d5)}.flex{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.form{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.form input{flex:1;min-width:150px}.item{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #2c3550}.item:last-child{border:0}.pill{font-size:12px;background:#282e4c;padding:5px 9px;border-radius:20px;color:#c7c9f7}.hidden{display:none}.modal-backdrop{position:fixed;inset:0;background:#050814cc;display:flex;align-items:center;justify-content:center;padding:18px;z-index:20}.modal{background:#19213a;border:1px solid #495274;border-radius:18px;padding:24px;width:min(440px,100%);box-shadow:0 20px 60px #000a}.modal h2{margin-bottom:8px}.modal input,.modal select{width:100%}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.modal label{margin-top:16px}.small{font-size:13px}.toast{position:fixed;right:20px;bottom:20px;background:#343060;padding:14px 20px;border-radius:12px;box-shadow:0 12px 35px #0008;display:none}label[hidden]{display:none!important}label{display:flex;flex-direction:column;gap:6px;color:#aeb8d3;font-size:13px} .form label{flex:1} @media(max-width:760px){.shell{display:block}aside{padding:14px;border-right:0;border-bottom:1px solid #29314a}.brand{margin:0 0 12px}.links{display:flex;overflow:auto}.nav{width:auto;white-space:nowrap}main{padding:20px 14px}.grid{grid-template-columns:1fr}.item{align-items:flex-start}.item .flex{justify-content:flex-end}}
+
+textarea{background:#141b30;color:#f1f1ff;border:1px solid #343c59;border-radius:9px;padding:11px}
+.task-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}
+.overdue{color:#ffad86}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:15px 0}.field-grid .wide{grid-column:1/-1}
+.modal{max-height:90vh;overflow-y:auto;width:min(560px,100%)}.modal label{margin-top:0}
+.item>div:first-child{min-width:0}.empty{padding:12px 0}.category-head{margin:20px 0 8px;color:#c5b8ff}
+@media(max-width:600px){.field-grid{grid-template-columns:1fr}.field-grid .wide{grid-column:auto}.modal{padding:16px}.item{flex-direction:column}.item .flex{justify-content:flex-start}}
+.daily-progress{height:9px;background:#2e3650;border-radius:20px;overflow:hidden;margin-top:16px}.week-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}.week-day{min-width:0;background:#151c30;border:1px solid #2b3551;border-radius:13px;padding:12px}.day-heading{padding:7px 5px;background:#302a54;width:100%;font-size:12px}.week-task{border-left:3px solid #8c76ed;background:#202841;padding:8px;margin:8px 0;border-radius:5px;overflow-wrap:anywhere;font-size:12px;display:flex;flex-direction:column;gap:5px}.priority-urgent{color:#ff9b9b}.priority-high{color:#ffd29a}.day-nav{margin:15px 0}@media(max-width:1000px){.week-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.week-grid{grid-template-columns:1fr}}
+
+.quest-progress{margin:12px 0}.quest-milestone{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #2c3550}.quest-milestone:last-child{border-bottom:0}.quest-milestone input{width:18px;height:18px;flex:none;accent-color:#9b83ff}.quest-milestone .milestone-name{flex:1;min-width:0;overflow-wrap:anywhere}.quest-milestone.done .milestone-name{text-decoration:line-through;color:#a0abc7}.quest-description{white-space:pre-wrap;overflow-wrap:anywhere}.quest-reward{font-weight:700;color:#c5b8ff}.quest-controls{display:flex;flex-wrap:wrap;gap:6px}.quest-controls button{padding:6px 9px}.quest-card{border-color:#40385f}.quest-card.finished{border-color:#2c594d}.quest-empty{padding:18px 0;color:#a0abc7}.quest-stats{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.quest-stats .pill{display:inline-block}.milestone-input{display:flex;gap:8px;align-items:center}.milestone-input input{flex:1}.quest-status{font-size:13px;color:#9bd8b4}
+.character-hero{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.avatar-mark{height:88px;width:88px;border-radius:22px;background:linear-gradient(135deg,#4b3a88,#193a5b);display:grid;place-items:center;font-size:42px}.achievement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.achievement{background:#151c30;border:1px solid #35405d;border-radius:14px;padding:16px}.achievement.locked{opacity:.58}.achievement-icon{font-size:26px}.achievement-title{font-weight:700;margin:6px 0}.achievement-reward{color:#c5b8ff;font-size:13px}.profile-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.profile-stat{background:#202842;border-radius:12px;padding:16px}.profile-stat strong{display:block;font-size:24px}.profile-stat span{font-size:12px;color:#a0abc7}.title-picker{max-width:380px}.achievement-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}@media(max-width:700px){.achievement-grid{grid-template-columns:1fr}.profile-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* v0.5.1 navigation and portrait */
+.shell{grid-template-columns:230px minmax(0,1fr)}
+.topbar{display:flex;align-items:center;gap:12px;justify-content:space-between;background:#11172a;border-bottom:1px solid #29314a;padding:12px 24px;position:sticky;top:0;z-index:12}
+.topbar .brand{margin:0;font-size:20px}.topbar-left,.quicklinks{display:flex;align-items:center;gap:8px}.quicklinks button{padding:9px 13px;background:transparent;color:#b7c2de}.quicklinks button.active{background:#2d2852;color:white}.menu-toggle{font-size:23px;line-height:1;background:#272e46;padding:7px 12px}.layout{display:grid;grid-template-columns:230px minmax(0,1fr);min-height:calc(100vh - 64px)}
+.layout.menu-closed{grid-template-columns:0 minmax(0,1fr)}.layout aside{min-width:0;overflow:hidden;padding:22px 14px}.layout.menu-closed aside{padding:0;border:0}.layout main{min-width:0}
+.nav-section{font-size:11px;color:#8492b5;letter-spacing:.09em;padding:12px 12px 3px;text-transform:uppercase}.nav{margin:4px 0}
+.avatar-mark{overflow:hidden;flex:none;border-radius:18px}.avatar-mark img{display:block;width:100%;height:100%;object-fit:cover}.avatar-actions{display:flex;flex-direction:column;gap:7px;align-items:flex-start}.avatar-actions button{padding:7px 11px}.portrait-hint{font-size:12px;color:#a0abc7}.portrait-upload{display:none}
+@media(max-width:760px){.layout,.layout.menu-closed{display:block}.layout aside{position:fixed;top:61px;bottom:0;left:0;width:min(300px,85vw);overflow-y:auto;background:#11172a;z-index:16;box-shadow:12px 0 35px #0008;transition:transform .18s ease;padding:18px 12px}.layout.menu-closed aside{transform:translateX(-105%);padding:18px 12px;border-right:1px solid #29314a}.menu-scrim{position:fixed;inset:61px 0 0;background:#0008;z-index:15}.menu-scrim.hidden{display:none}.topbar{padding:10px 14px}.topbar .brand{font-size:18px}.quicklinks{gap:2px}.quicklinks button{padding:8px;font-size:12px}.layout main{padding:20px 14px}.layout aside .links{display:block;overflow:visible}.layout aside .nav{width:100%;white-space:normal}}
+
+/* v0.6 visual progression */
+.progression-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px}
+.radar-frame{width:100%;max-width:440px;margin:0 auto}.radar-frame svg{display:block;width:100%;height:auto;overflow:visible}
+.radar-legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.radar-legend .radar-entry{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 11px;background:#202841;border-radius:9px;font-size:13px}
+.mastery-rank{font-size:12px;font-weight:700;border:1px solid #4b527a;border-radius:20px;color:#c8c0ff;padding:4px 9px;white-space:nowrap}
+.mastery-rank.master{border-color:#b89c53;color:#f0d98f}.mastery-rank.grandmaster{border-color:#6db5b4;color:#a6ece8}
+.mastery-card{display:flex;flex-direction:column;gap:10px}.mastery-row{padding:10px 0;border-bottom:1px solid #2c3550}.mastery-row:last-child{border-bottom:0}.mastery-row-top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.milestone-track{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.level-milestone{background:#1a2239;border:1px solid #3a4562;border-radius:14px;padding:14px;text-align:center}.level-milestone.unlocked{border-color:#8572d9;background:#292747}.milestone-icon{font-size:27px;margin-bottom:6px}.milestone-level{font-size:12px;color:#b2b9d0}.milestone-name{font-weight:700;margin:7px 0;font-size:14px}.milestone-status{font-size:12px;color:#aeb8d3}.level-milestone.unlocked .milestone-status{color:#b9aaff}
+@media(max-width:800px){.progression-layout{grid-template-columns:1fr}.milestone-track{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.radar-legend{grid-template-columns:1fr}}
+</style></head><body><header class="topbar"><div class="topbar-left"><button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="sideMenu">☰</button><div class="brand">✦ ASCEND</div></div><div class="quicklinks"><button class="quick-nav active" data-tab="dashboard">Dashboard</button><button class="quick-nav" data-tab="daily">Today</button><button class="quick-nav" data-tab="tasks">Tasks</button></div></header><div class="layout menu-closed" id="layout"><aside id="sideMenu"><div class="nav-section">Planner</div><div class="links"><button class="nav active" data-tab="dashboard">◈ Dashboard</button><button class="nav" data-tab="daily">◷ Today</button><button class="nav" data-tab="tasks">☑ Tasks</button><button class="nav" data-tab="weekly">▦ Week</button><div class="nav-section">Progression</div><button class="nav" data-tab="quests">⚑ Quests</button><button class="nav" data-tab="character">♜ Character</button><button class="nav" data-tab="achievements">🏆 Achievements</button><button class="nav" data-tab="skills">✧ Skills</button><button class="nav" data-tab="attributes">⬡ Attributes</button><div class="nav-section">Data</div><button class="nav" data-tab="history">◷ History &amp; Saves</button></div></aside><main id="app"></main></div><div id="menuScrim" class="menu-scrim hidden"></div><div id="toast" class="toast"></div><div id="modalRoot"></div><script>
+
+const KEY='ascend-rpg-v01';
+const defaults=['Strength','Endurance','Intelligence','Wisdom','Creativity','Charisma','Discipline'];
+const id=()=>crypto.randomUUID();
+const fresh=()=>({name:'Adventurer',xp:0,tasks:[],skills:[],attributes:defaults.map(name=>({id:id(),name,xp:0})),history:[],quests:[],achievementUnlocks:{},equippedTitle:'',portrait:''});
+let state;try{state=JSON.parse(localStorage.getItem(KEY))||fresh()}catch{state=fresh()}
+function normalize(){
+  state.name=typeof state.name==='string'?state.name:'Adventurer';
+  state.xp=Number(state.xp)||0;
+  for(const key of ['tasks','skills','attributes','history'])if(!Array.isArray(state[key]))state[key]=[];
+  if(!Array.isArray(state.quests))state.quests=[];
+  if(!state.achievementUnlocks||typeof state.achievementUnlocks!=='object'||Array.isArray(state.achievementUnlocks))state.achievementUnlocks={};
+  if(typeof state.equippedTitle!=='string')state.equippedTitle='';
+  if(typeof state.portrait!=='string'||(state.portrait&&!/^data:image\/(png|jpeg|webp);base64,/.test(state.portrait)))state.portrait='';
+  state.quests=state.quests.filter(q=>q&&typeof q==='object').map(q=>({
+    ...q,id:q.id||id(),title:String(q.title||'Untitled Quest'),description:String(q.description||''),
+    targetDate:q.targetDate||'',skill:q.skill||'',attribute:q.attribute||'',xp:Number.isFinite(Number(q.xp))?Math.max(0,Math.round(Number(q.xp))):500,
+    milestones:Array.isArray(q.milestones)?q.milestones.filter(m=>m&&typeof m==='object').map(m=>({id:m.id||id(),name:String(m.name||'Milestone'),done:!!m.done})):[],
+    completed:!!q.completed,completedAt:q.completedAt||null
+  }));
+  state.tasks=state.tasks.map(t=>({...t,category:t.category||'Personal',repeat:t.repeat||'none',interval:Math.max(1,Number(t.interval)||1),done:!!t.done,priority:['low','normal','high','urgent'].includes(t.priority)?t.priority:'normal',time:t.time||'',duration:Math.max(0,Number(t.duration)||0),skill:t.skill||'',attribute:t.attribute||'',xp:Number(t.xp)||30,due:t.due||''}));
+}
+normalize();
+const localToday=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+let tab='dashboard', taskFilter='active', priorityFilter='all', statusFilter='active', viewDate=localToday(), weekOffset=0;
+const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const level=x=>Math.floor(Math.sqrt(Math.max(0,x)/100));
+
+function nextDate(date,days){const [y,m,d]=date.split('-').map(Number);const v=new Date(y,m-1,d+days);return `${v.getFullYear()}-${String(v.getMonth()+1).padStart(2,'0')}-${String(v.getDate()).padStart(2,'0')}`}
+function repeatDays(t){return t.repeat==='daily'?1:t.repeat==='weekly'?7:t.repeat==='custom'?Math.max(1,Number(t.interval)||1):0}
+function progress(x){const l=level(x),start=100*l*l,end=100*(l+1)*(l+1);return `<div class="bar"><div class="fill" style="width:${Math.max(0,Math.min(100,(x-start)/(end-start)*100))}%"></div></div><p class="muted small">${x-start} / ${end-start} XP to Level ${l+1}</p>`}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display='none',3500)}
+function options(items,selected=''){return `<option value="">None</option>`+items.map(x=>`<option value="${esc(x.id)}" ${x.id===selected?'selected':''}>${esc(x.name)}</option>`).join('')}
+function header(title,subtitle){return `<h1>${title}</h1><p class="muted">${subtitle}</p>`}
+function labelFor(key,identifier){return (state[key].find(x=>x.id===identifier)||{}).name||''}
+function reward(title,base,skillId,attrId,category='Training',directTraining=false){
+  const before=level(state.xp),details=[{type:'character',name:'Character',xp:base}];
+  state.xp+=base;
+  const skill=state.skills.find(x=>x.id===skillId);
+  if(skill){const amount=(directTraining?base:Math.round(base*.7));skill.xp+=amount;details.push({type:'skill',name:skill.name,xp:amount})}
+  const attr=state.attributes.find(x=>x.id===attrId);
+  if(attr){const amount=(directTraining?base:Math.round(base*.4));attr.xp+=amount;details.push({type:'attribute',name:attr.name,xp:amount})}
+  state.history.unshift({id:id(),title,category,awards:details,detail:details.map(x=>`+${x.xp} ${x.name} XP`).join(' · '),at:new Date().toISOString()});
+  state.history=state.history.slice(0,1000);
+  save();
+  reconcileAchievements();
+  const reached=CHARACTER_MILESTONES.filter(m=>before<m.level&&level(state.xp)>=m.level);
+  toast(reached.length?`★ ${reached[reached.length-1].name} — Level ${level(state.xp)}!`:level(state.xp)>before?`LEVEL UP! Level ${level(state.xp)} — ${details[0].xp} XP earned`:`+${base} Character XP`);
+}
+function completeTask(t){
+  if(!t||t.done)return;
+  const days=repeatDays(t);
+  if(days&&t.due&&t.due>localToday()){toast('This recurring task is not due yet');return}
+  if(days){
+    // Carry one overdue occurrence forward, then schedule from today or the due date, whichever is later.
+    t.due=nextDate(t.due && t.due>localToday()?t.due:localToday(),days);
+    t.completedCount=(Number(t.completedCount)||0)+1;
+    t.lastCompleted=new Date().toISOString();
+  }else{t.done=true;t.lastCompleted=new Date().toISOString()}
+  reward(t.name,t.xp,t.skill,t.attribute,t.category);
+  if(state.history[0]){state.history[0].taskId=t.id;save()}
+  render();
+}
+function priorityRank(t){return {urgent:0,high:1,normal:2,low:3}[t.priority||'normal']??2}
+function sortedTasks(tasks){return [...tasks].sort((a,b)=>priorityRank(a)-priorityRank(b)||(a.time||'99:99').localeCompare(b.time||'99:99')||(a.due||'9999').localeCompare(b.due||'9999'))}
+function isDueOn(t,date){if(t.done)return false;if(!t.due)return true;if(t.due===date)return true;if(t.due>date)return false;const days=repeatDays(t);if(!days)return false;const diff=Math.round((Date.parse(date+'T12:00:00')-Date.parse(t.due+'T12:00:00'))/86400000);return diff>=0&&diff%days===0}
+function onDate(t,date){return !t.done&&t.due===date}
+function dayTasks(date){const today=localToday();return sortedTasks(state.tasks.filter(t=>!t.done&&(t.due===date||(!t.due&&date===today)||(date===today&&t.due&&t.due<today))))}
+function completedOn(date){return state.history.filter(h=>{if(!h.taskId||!h.at)return false;const d=new Date(h.at);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`===date}).length}
+function dateTitle(date){return new Date(date+'T12:00:00').toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+function quickForm(){return `<form id="quickAdd" class="form"><input name="name" required maxlength="100" placeholder="Quick add a task..."><button>Add Task</button></form>`}
+function dayPlanner(date){const list=dayTasks(date),scheduled=list.filter(t=>t.time),flexible=list.filter(t=>!t.time),today=date===localToday(),done=completedOn(date);return `<div class="card"><div class="flex between"><div><h3>${esc(dateTitle(date))}</h3><p class="muted small">${done} completed today${today?' · '+list.length+' remaining':''}</p></div><button class="secondary" id="plannerNew">+ Full Task</button></div>${today?quickForm():''}<div class="daily-progress"><div class="fill" style="width:${Math.round(100*done/Math.max(1,done+list.length))}%"></div></div></div><div class="card"><h3>Scheduled (${scheduled.length})</h3>${scheduled.map(taskRow).join('')||'<p class="muted">No scheduled tasks.</p>'}</div><div class="card"><h3>Flexible to-dos (${flexible.length})</h3>${flexible.map(taskRow).join('')||'<p class="muted">No flexible tasks for this day.</p>'}</div>`}
+function weekStart(offset){const d=new Date(localToday()+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7)+offset*7);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function weekView(){const start=weekStart(weekOffset),dates=Array.from({length:7},(_,i)=>nextDate(start,i));return `<div class="card"><div class="flex between"><button class="secondary" id="prevWeek">← Previous</button><h3>${esc(dates[0])} – ${esc(dates[6])}</h3><div class="flex"><button class="secondary" id="thisWeek">This Week</button><button class="secondary" id="nextWeek">Next →</button></div></div><p class="muted small">Recurring activities appear on their projected dates. Overdue items remain in Today until completed.</p></div><div class="week-grid">${dates.map(date=>{const tasks=sortedTasks(state.tasks.filter(t=>!t.done&&t.due&&isDueOn(t,date)));return `<section class="week-day"><button class="day-heading" data-day="${date}">${new Date(date+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}${date===localToday()?' · Today':''}</button>${tasks.map(t=>`<div class="week-task"><span>${t.time?esc(t.time)+' · ':''}${esc(t.name)}</span><span class="muted small">${esc(t.priority||'normal')}</span></div>`).join('')||'<p class="muted small">Free</p>'}</section>`}).join('')}</div>`}
+function taskMeta(t){
+ const due=t.due?`<span class="${t.due<localToday()?'overdue':'muted'} small">${t.due<localToday()?'Overdue · ':''}Due ${esc(t.due)}</span>`:'';
+ const timing=t.time?`<span class="pill">${esc(t.time)}${t.duration?' · '+t.duration+' min':''}</span>`:'';
+ const priority=`<span class="pill priority-${esc(t.priority||'normal')}">${esc(t.priority||'normal')}</span>`;
+ const rec=repeatDays(t)?`<span class="pill">${t.repeat==='custom'?`Every ${t.interval} days`:esc(t.repeat)}</span>`:'';
+ const skill=labelFor('skills',t.skill),attr=labelFor('attributes',t.attribute);
+ return `<div class="task-meta"><span class="pill">${esc(t.category)}</span><span class="pill">${t.xp} XP</span>${priority}${timing}${rec}${due}${skill?`<span class="pill">✧ ${esc(skill)}</span>`:''}${attr?`<span class="pill">⬡ ${esc(attr)}</span>`:''}</div>`
+}
+function taskRow(t){return `<div class="item"><div><strong>${esc(t.name)}</strong>${taskMeta(t)}</div><div class="flex">${!t.done?`<button data-complete="${esc(t.id)}">Complete</button>`:''}<button class="secondary" data-edit="${esc(t.id)}">Edit</button><button class="danger" data-delete="${esc(t.id)}">Delete</button></div></div>`}
+
+// Cosmetic achievements only. XP is never granted by this subsystem.
+const ACHIEVEMENTS=[
+ {id:'first-task',name:'First Steps',icon:'👣',description:'Complete your first task.',metric:'tasks',target:1,title:'The Beginner'},
+ {id:'tasks-10',name:'Getting Things Done',icon:'☑️',description:'Complete 10 tasks.',metric:'tasks',target:10,title:'The Productive'},
+ {id:'tasks-50',name:'Reliable Adventurer',icon:'🛡️',description:'Complete 50 tasks.',metric:'tasks',target:50,title:'The Reliable'},
+ {id:'tasks-100',name:'Centurion',icon:'💯',description:'Complete 100 tasks.',metric:'tasks',target:100,title:'The Unstoppable'},
+ {id:'first-training',name:'Practice Makes Progress',icon:'🏋️',description:'Log your first training session.',metric:'training',target:1,title:'The Apprentice'},
+ {id:'training-25',name:'Dedicated',icon:'🔥',description:'Log 25 training sessions.',metric:'training',target:25,title:'The Dedicated'},
+ {id:'first-quest',name:'Quest Complete',icon:'⚑',description:'Finish your first quest.',metric:'quests',target:1,title:'Quest Seeker'},
+ {id:'quests-5',name:'Quest Veteran',icon:'🏆',description:'Finish five quests.',metric:'quests',target:5,title:'The Questkeeper'},
+ {id:'level-5',name:'Growing Stronger',icon:'✨',description:'Reach character level 5.',metric:'level',target:5,title:'The Rising'},
+ {id:'level-10',name:'Veteran Adventurer',icon:'🌟',description:'Reach character level 10.',metric:'level',target:10,title:'The Veteran'},
+ {id:'skill-5',name:'Skilled Practitioner',icon:'📚',description:'Reach level 5 in any skill.',metric:'skillLevel',target:5,title:'The Skilled'},
+ {id:'attribute-5',name:'Inner Strength',icon:'💠',description:'Reach level 5 in any attribute.',metric:'attributeLevel',target:5,title:'The Resolute'}
+];
+function progressionStats(){
+ const h=state.history;
+ const tasks=h.filter(x=>!!x.taskId).length;
+ const quests=h.filter(x=>!!x.questId||x.category==='Quest').length;
+ const training=h.filter(x=>x.category==='Training'||String(x.title||'').startsWith('Trained ')).length;
+ const totalEarned=h.reduce((sum,x)=>sum+(Array.isArray(x.awards)?x.awards.filter(a=>a.type==='character').reduce((n,a)=>n+(Number(a.xp)||0),0):0),0);
+ return {tasks,quests,training,level:level(state.xp),skillLevel:Math.max(0,...state.skills.map(x=>level(x.xp))),attributeLevel:Math.max(0,...state.attributes.map(x=>level(x.xp))),totalEarned};
+}
+function achievementProgress(a,stats){return Math.min(a.target,stats[a.metric]||0)}
+function reconcileAchievements(){
+ const stats=progressionStats();let changed=false;
+ for(const a of ACHIEVEMENTS){if(!state.achievementUnlocks[a.id]&&achievementProgress(a,stats)>=a.target){state.achievementUnlocks[a.id]=new Date().toISOString();changed=true}}
+ if(state.equippedTitle&&!ACHIEVEMENTS.some(a=>a.title===state.equippedTitle&&state.achievementUnlocks[a.id])){state.equippedTitle='';changed=true}
+ if(changed)save();
+}
+function earnedAchievements(){return ACHIEVEMENTS.filter(a=>state.achievementUnlocks[a.id])}
+function statBlock(name,value){return `<div class="profile-stat"><strong>${value}</strong><span>${esc(name)}</span></div>`}
+function portraitMarkup(){return state.portrait?`<img src="${state.portrait}" alt="Character portrait">`:"♜"}
+// Cosmetic-only visual progression. Existing XP and save formats remain unchanged.
+const MASTERY_RANKS=[{min:50,name:'Grandmaster'},{min:35,name:'Master'},{min:20,name:'Expert'},{min:10,name:'Adept'},{min:5,name:'Apprentice'},{min:0,name:'Novice'}];
+const CHARACTER_MILESTONES=[{level:5,name:'Emerging Adventurer',icon:'🌱'},{level:10,name:'Seasoned Adventurer',icon:'🛡️'},{level:25,name:'Veteran Adventurer',icon:'⚔️'},{level:50,name:'Legendary Adventurer',icon:'👑'}];
+function masteryRank(lvl){return MASTERY_RANKS.find(r=>lvl>=r.min).name}
+function masteryBadge(lvl){const rank=masteryRank(lvl);return `<span class="mastery-rank ${rank.toLowerCase()}">${rank}</span>`}
+function radarChart(){
+ const names=['Strength','Endurance','Intelligence','Wisdom','Creativity','Charisma','Discipline'];
+ const attrs=names.map(name=>state.attributes.find(a=>a.name.toLowerCase()===name.toLowerCase()));
+ const levels=attrs.map(a=>a?level(a.xp):0);
+ const cx=200,cy=185,r=122,n=names.length;
+ const point=(i,f)=>{const a=-Math.PI/2+i*2*Math.PI/n;return `${(cx+Math.cos(a)*r*f).toFixed(2)},${(cy+Math.sin(a)*r*f).toFixed(2)}`};
+ const ring=f=>Array.from({length:n},(_,i)=>point(i,f)).join(' ');
+ const rings=[.2,.4,.6,.8,1].map(f=>`<polygon points="${ring(f)}" fill="none" stroke="#4c5879" stroke-width="1"/>`).join('');
+ const axes=names.map((_,i)=>`<line x1="${cx}" y1="${cy}" x2="${point(i,1).split(',')[0]}" y2="${point(i,1).split(',')[1]}" stroke="#4c5879" stroke-width="1"/>`).join('');
+ const shape=levels.map((l,i)=>point(i,Math.min(50,l)/50)).join(' ');
+ const dots=levels.map((l,i)=>{const [x,y]=point(i,Math.min(50,l)/50).split(',');return `<circle cx="${x}" cy="${y}" r="3.5" fill="#c8baff"/>`}).join('');
+ const labels=names.map((name,i)=>{const a=-Math.PI/2+i*2*Math.PI/n,x=cx+Math.cos(a)*(r+34),y=cy+Math.sin(a)*(r+28),abbr=['STR','END','INT','WIS','CRE','CHA','DIS'][i];return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" fill="#d3d8ec" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="700">${abbr}</text>`}).join('');
+ return `<div class="radar-frame"><svg viewBox="0 0 400 370" role="img" aria-label="Attribute radar chart, fixed scale zero to fifty. ${names.map((name,i)=>`${name} level ${levels[i]}`).join(', ')}"><title>Core attribute levels on a fixed level 50 scale</title>${rings}${axes}<polygon points="${shape}" fill="#9b83ff" fill-opacity=".28" stroke="#b6a3ff" stroke-width="2.5" stroke-linejoin="round"/>${dots}${labels}</svg></div><div class="radar-legend">${names.map((name,i)=>`<div class="radar-entry"><span>${esc(name)}</span><strong>Lv ${levels[i]}${levels[i]>50?' · 50+':''}</strong></div>`).join('')}</div>`;
+}
+function masteryList(skills){return skills.length?skills.map(s=>{const l=level(s.xp);return `<div class="mastery-row"><div class="mastery-row-top"><strong>${esc(s.name)}</strong><div class="flex"><span class="pill">Lv ${l}</span>${masteryBadge(l)}</div></div>${progress(s.xp)}</div>`}).join(''):'<p class="muted">Train a skill to begin earning mastery ranks.</p>'}
+function milestoneTrack(){const current=level(state.xp);return `<div class="milestone-track">${CHARACTER_MILESTONES.map(m=>`<div class="level-milestone ${current>=m.level?'unlocked':''}"><div class="milestone-icon">${m.icon}</div><div class="milestone-level">LEVEL ${m.level}</div><div class="milestone-name">${m.name}</div><div class="milestone-status">${current>=m.level?'✓ Reached':`${m.level-current} levels remaining`}</div></div>`).join('')}</div><p class="muted small" style="margin-top:12px">Milestones are visual markers only. They do not award XP or replace your equipped achievement title.</p>`}
+function characterPage(){
+ const st=progressionStats(),ach=earnedAchievements(),best=[...state.skills].sort((a,b)=>b.xp-a.xp).slice(0,5);
+ return header('Character Sheet','Your real-world progression, all in one place.')+`<div class="card"><div class="character-hero"><div class="avatar-mark">${portraitMarkup()}</div><div style="flex:1;min-width:200px"><p class="muted small">ADVENTURER · LEVEL ${st.level}</p><h2>${esc(state.name)}</h2><p class="quest-reward">${esc(state.equippedTitle||'No title equipped')}</p></div><div class="avatar-actions"><button class="secondary" id="uploadPortrait">Upload Portrait</button>${state.portrait?`<button class="secondary" id="removePortrait">Remove Portrait</button>`:''}<input type="file" class="portrait-upload" id="portraitFile" accept="image/png,image/jpeg,image/webp"><span class="portrait-hint">PNG, JPG or WebP · auto-resized</span></div><button class="secondary" id="profileRename">Rename</button></div><p style="margin-top:18px">${progress(state.xp)}</p><label class="title-picker">Equipped Title<select id="equipTitle"><option value="">No title</option>${ach.map(a=>`<option value="${esc(a.title)}" ${state.equippedTitle===a.title?'selected':''}>${esc(a.title)}</option>`).join('')}</select></label></div>`+
+ `<div class="card"><h3>Lifetime Statistics</h3><div class="profile-stats">${statBlock('Character XP',state.xp)}${statBlock('Tasks completed',st.tasks)}${statBlock('Quests completed',st.quests)}${statBlock('Training sessions',st.training)}${statBlock('Achievements',ach.length+' / '+ACHIEVEMENTS.length)}${statBlock('Skills developed',state.skills.length)}${statBlock('Highest skill level',st.skillLevel)}${statBlock('Highest attribute level',st.attributeLevel)}</div><p class="muted small" style="margin-top:12px">Historical task counts use saved activity records. Some completions from older app versions may not be identifiable.</p></div>`+
+ `<div class="progression-layout"><div class="card"><h3>Attribute Radar</h3>${radarChart()}</div><div class="card"><h3>Skill Mastery</h3><p class="muted small">Your five highest-level skills. Ranks are cosmetic.</p><div class="mastery-card">${masteryList(best)}</div></div></div>`+
+ `<div class="card"><h3>Character Milestones</h3>${milestoneTrack()}</div>`+
+ `<div class="card"><h3>Recent Achievements</h3>${ach.slice().sort((a,b)=>String(state.achievementUnlocks[b.id]).localeCompare(String(state.achievementUnlocks[a.id]))).slice(0,5).map(a=>`<div class="item"><span>${a.icon} ${esc(a.name)}</span><span class="pill">Unlocked</span></div>`).join('')||'<p class="muted">Complete tasks to earn your first achievement.</p>'}<button class="secondary" id="viewAchievements" style="margin-top:12px">View Achievements</button></div></div>`;
+}
+let achievementFilter='all';
+function achievementsPage(){const stats=progressionStats(),unlocked=earnedAchievements().length;return header('Achievements','Earn badges and cosmetic titles through your progress. No bonus XP is awarded.')+`<div class="card"><h3>${unlocked} / ${ACHIEVEMENTS.length} Unlocked</h3><div class="bar"><div class="fill" style="width:${unlocked/ACHIEVEMENTS.length*100}%"></div></div><p class="muted small" style="margin-top:10px">Unlocked titles can be equipped on your Character Sheet.</p></div><div class="achievement-filter"><button class="${achievementFilter==='all'?'':'secondary'}" data-achievement-filter="all">All</button><button class="${achievementFilter==='unlocked'?'':'secondary'}" data-achievement-filter="unlocked">Unlocked</button><button class="${achievementFilter==='locked'?'':'secondary'}" data-achievement-filter="locked">Locked</button></div><div class="achievement-grid">${ACHIEVEMENTS.filter(a=>achievementFilter==='all'||(achievementFilter==='unlocked'?!!state.achievementUnlocks[a.id]:!state.achievementUnlocks[a.id])).map(a=>{const unlocked=!!state.achievementUnlocks[a.id],n=achievementProgress(a,stats);return `<div class="achievement ${unlocked?'':'locked'}"><div class="achievement-icon">${a.icon}</div><div class="achievement-title">${esc(a.name)} ${unlocked?'✓':'🔒'}</div><p class="muted small">${esc(a.description)}</p><div class="bar"><div class="fill" style="width:${n/a.target*100}%"></div></div><p class="muted small" style="margin:8px 0">${n} / ${a.target}${unlocked?' · Unlocked '+new Date(state.achievementUnlocks[a.id]).toLocaleDateString():''}</p><div class="achievement-reward">Title: ${esc(a.title)}</div></div>`}).join('')||'<p class="muted">No achievements in this filter.</p>'}</div>`}
+
+function questProgress(q){const total=q.milestones.length,done=q.milestones.filter(m=>m.done).length;return {total,done,percent:total?Math.round(done/total*100):0}}
+function questCard(q){
+ const p=questProgress(q),finished=q.completed,skill=labelFor('skills',q.skill),attribute=labelFor('attributes',q.attribute);
+ return `<div class="card quest-card ${finished?'finished':''}">
+ <div class="flex between"><div><h2 style="margin:0">${esc(q.title)}</h2><p class="muted small" style="margin:7px 0">${finished?'Completed quest':'Long-term objective'}</p></div><span class="pill">${finished?'✓ Completed':p.percent+'% complete'}</span></div>
+ ${q.description?`<p class="muted quest-description">${esc(q.description)}</p>`:''}
+ <div class="quest-stats"><span class="pill">★ ${q.xp} Character XP</span>${skill?`<span class="pill">✧ ${esc(skill)} (+${Math.round(q.xp*.7)} skill XP)</span>`:''}${attribute?`<span class="pill">⬡ ${esc(attribute)} (+${Math.round(q.xp*.4)} attribute XP)</span>`:''}${q.targetDate?`<span class="pill">Target ${esc(q.targetDate)}</span>`:''}</div>
+ <div class="quest-progress"><div class="flex between"><span class="muted small">Milestones</span><span class="muted small">${p.done} / ${p.total}</span></div><div class="bar" style="margin-top:8px"><div class="fill" style="width:${p.percent}%"></div></div></div>
+ <div>${q.milestones.map((m,i)=>`<div class="quest-milestone ${m.done?'done':''}"><input type="checkbox" aria-label="Complete ${esc(m.name)}" data-quest-check="${esc(q.id)}" data-milestone="${esc(m.id)}" ${m.done?'checked':''} ${finished?'disabled':''}><span class="milestone-name">${esc(m.name)}</span>${!finished?`<div class="quest-controls"><button class="secondary" title="Move up" aria-label="Move ${esc(m.name)} up" data-move="${esc(q.id)}" data-move-id="${esc(m.id)}" data-dir="-1" ${i===0?'disabled':''}>↑</button><button class="secondary" title="Move down" aria-label="Move ${esc(m.name)} down" data-move="${esc(q.id)}" data-move-id="${esc(m.id)}" data-dir="1" ${i===q.milestones.length-1?'disabled':''}>↓</button><button class="secondary" title="Edit milestone" data-edit-milestone="${esc(q.id)}" data-mid="${esc(m.id)}">Edit</button><button class="danger" title="Remove milestone" data-remove-milestone="${esc(q.id)}" data-mid="${esc(m.id)}">×</button></div>`:''}</div>`).join('')||'<p class="quest-empty">No milestones yet. Add one to begin.</p>'}</div>
+ ${!finished?`<div class="flex" style="margin-top:14px"><button class="secondary" data-add-milestone="${esc(q.id)}">+ Milestone</button><button class="secondary" data-edit-quest="${esc(q.id)}">Edit Quest</button><button class="danger" data-delete-quest="${esc(q.id)}">Delete</button>${p.total>0&&p.done===p.total?`<button data-claim-quest="${esc(q.id)}">★ Complete Quest · +${q.xp} XP</button>`:''}</div>`:`<p class="quest-status">✓ Reward claimed ${q.completedAt?new Date(q.completedAt).toLocaleDateString():''}</p><div class="flex"><button class="danger" data-delete-quest="${esc(q.id)}">Delete Quest</button></div>`}
+ </div>`;
+}
+function questJournal(){
+ const active=state.quests.filter(q=>!q.completed),finished=state.quests.filter(q=>q.completed);
+ return header('Quest Journal','Long-term goals with milestones independent of your daily tasks.')+
+ `<div class="card"><div class="flex between"><div><h3 style="margin:0">Your Adventures</h3><p class="muted small" style="margin:8px 0 0">Check milestones as you reach them. Claim a quest reward only after every milestone is complete.</p></div><button id="newQuest">+ New Quest</button></div><div class="quest-stats"><span class="pill">${active.length} Active</span><span class="pill">${finished.length} Completed</span></div></div>`+
+ `<h2>Active Quests</h2>${active.map(questCard).join('')||'<div class="card"><p class="muted">No active quests yet. Create a long-term goal to begin.</p></div>'}`+
+ `<h2>Completed Quests</h2>${finished.map(questCard).join('')||'<div class="card"><p class="muted">Your completed adventures will appear here.</p></div>'}`;
+}
+function openQuestEditor(q){
+ showModal(`<h2>${q?'Edit Quest':'Create Quest'}</h2><p class="muted small">Milestones are separate from planner tasks. Claiming a completed quest grants bonus XP once.</p><form id="questForm"><div class="field-grid"><label class="wide">Quest title<input name="title" maxlength="100" required value="${esc(q?.title||'')}" placeholder="e.g. Learn Japanese N5"></label><label class="wide">Description<textarea name="description" rows="3" maxlength="1000" style="width:100%" placeholder="What are you working toward?">${esc(q?.description||'')}</textarea></label><label>Target date (optional)<input name="targetDate" type="date" value="${esc(q?.targetDate||'')}"></label><label>Bonus character XP<input name="xp" type="number" min="0" max="10000" step="1" required value="${q?.xp??500}"></label><label>Associated skill (optional)<select name="skill">${options(state.skills,q?.skill||'')}</select></label><label>Associated attribute (optional)<select name="attribute">${options(state.attributes,q?.attribute||'')}</select></label></div><div class="modal-actions"><button type="button" class="secondary" data-close-modal>Cancel</button><button type="submit">${q?'Save Quest':'Create Quest'}</button></div></form>`);
+ document.getElementById('questForm').onsubmit=e=>{e.preventDefault();const f=new FormData(e.currentTarget),title=String(f.get('title')).trim(),xp=Number(f.get('xp'));if(!title||!Number.isInteger(xp)||xp<0||xp>10000)return toast('Enter a title and bonus XP from 0 to 10000');const update={title,description:String(f.get('description')).trim(),targetDate:String(f.get('targetDate')),xp,skill:String(f.get('skill')),attribute:String(f.get('attribute'))};if(q)Object.assign(q,update);else state.quests.push({id:id(),...update,milestones:[],completed:false,completedAt:null});save();closeModal();render();toast(q?'Quest updated':'Quest created')};
+}
+function milestoneEditor(q,m){
+ showModal(`<h2>${m?'Edit Milestone':'Add Milestone'}</h2><form id="milestoneForm"><label>Milestone description<input name="name" required maxlength="160" value="${esc(m?.name||'')}" placeholder="e.g. Learn Hiragana"></label><div class="modal-actions"><button type="button" class="secondary" data-close-modal>Cancel</button><button type="submit">${m?'Save':'Add Milestone'}</button></div></form>`);
+ document.getElementById('milestoneForm').onsubmit=e=>{e.preventDefault();const name=String(new FormData(e.currentTarget).get('name')).trim();if(!name)return;if(m)m.name=name;else q.milestones.push({id:id(),name,done:false});save();closeModal();render();toast(m?'Milestone updated':'Milestone added')};
+}
+function bindQuests(){
+ const newQuest=document.getElementById('newQuest');if(newQuest)newQuest.onclick=()=>openQuestEditor();
+ const getQuest=el=>state.quests.find(q=>q.id===el.dataset.addMilestone||q.id===el.dataset.editQuest||q.id===el.dataset.deleteQuest||q.id===el.dataset.claimQuest||q.id===el.dataset.questCheck||q.id===el.dataset.move||q.id===el.dataset.editMilestone||q.id===el.dataset.removeMilestone);
+ document.querySelectorAll('[data-edit-quest]').forEach(b=>b.onclick=()=>{const q=getQuest(b);if(q&&!q.completed)openQuestEditor(q)});
+ document.querySelectorAll('[data-add-milestone]').forEach(b=>b.onclick=()=>{const q=getQuest(b);if(q&&!q.completed)milestoneEditor(q)});
+ document.querySelectorAll('[data-edit-milestone]').forEach(b=>b.onclick=()=>{const q=getQuest(b),m=q?.milestones.find(m=>m.id===b.dataset.mid);if(q&&!q.completed&&m)milestoneEditor(q,m)});
+ document.querySelectorAll('[data-remove-milestone]').forEach(b=>b.onclick=()=>{const q=getQuest(b),m=q?.milestones.find(m=>m.id===b.dataset.mid);if(!q||q.completed||!m)return;showModal(`<h2>Remove Milestone?</h2><p class="muted">${esc(m.name)}</p><div class="modal-actions"><button class="secondary" data-close-modal>Cancel</button><button class="danger" id="confirmRemoveMilestone">Remove</button></div>`);document.getElementById('confirmRemoveMilestone').onclick=()=>{q.milestones=q.milestones.filter(x=>x.id!==m.id);save();closeModal();render()}});
+ document.querySelectorAll('[data-move]').forEach(b=>b.onclick=()=>{const q=getQuest(b);if(!q||q.completed)return;const i=q.milestones.findIndex(m=>m.id===b.dataset.moveId),j=i+Number(b.dataset.dir);if(i<0||j<0||j>=q.milestones.length)return;[q.milestones[i],q.milestones[j]]=[q.milestones[j],q.milestones[i]];save();render()});
+ document.querySelectorAll('[data-quest-check]').forEach(b=>b.onchange=()=>{const q=getQuest(b),m=q?.milestones.find(m=>m.id===b.dataset.milestone);if(!q||q.completed||!m)return;m.done=b.checked;save();render()});
+ document.querySelectorAll('[data-claim-quest]').forEach(b=>b.onclick=()=>{const q=getQuest(b);if(!q||q.completed||!q.milestones.length||q.milestones.some(m=>!m.done))return;showModal(`<h2>Complete ${esc(q.title)}?</h2><p class="muted">This will permanently mark the quest complete and award <strong>+${q.xp} Character XP</strong>${labelFor('skills',q.skill)?` and +${Math.round(q.xp*.7)} ${esc(labelFor('skills',q.skill))} XP`:''}${labelFor('attributes',q.attribute)?` and +${Math.round(q.xp*.4)} ${esc(labelFor('attributes',q.attribute))} XP`:''}. The reward can only be claimed once.</p><div class="modal-actions"><button class="secondary" data-close-modal>Cancel</button><button id="confirmClaim">Claim Reward</button></div>`);document.getElementById('confirmClaim').onclick=()=>{if(q.completed)return;q.completed=true;q.completedAt=new Date().toISOString();reward(`Quest completed: ${q.title}`,q.xp,q.skill,q.attribute,'Quest');if(state.history[0]){state.history[0].questId=q.id;save()}closeModal();render();toast(`Quest complete! +${q.xp} Character XP`)}});
+ document.querySelectorAll('[data-delete-quest]').forEach(b=>b.onclick=()=>{const q=getQuest(b);if(!q)return;showModal(`<h2>Delete ${esc(q.title)}?</h2><p class="muted">The quest and its milestones will be removed. Previously earned XP and activity history will remain.</p><div class="modal-actions"><button class="secondary" data-close-modal>Cancel</button><button class="danger" id="confirmDeleteQuest">Delete Quest</button></div>`);document.getElementById('confirmDeleteQuest').onclick=()=>{state.quests=state.quests.filter(x=>x.id!==q.id);save();closeModal();render();toast('Quest deleted')}});
+}
+function render(){
+ document.querySelectorAll('.nav,.quick-nav').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+ const app=document.getElementById('app');
+ reconcileAchievements();
+ if(tab==='character'){app.innerHTML=characterPage();
+ }else if(tab==='achievements'){app.innerHTML=achievementsPage();
+ }else if(tab==='quests'){app.innerHTML=questJournal();
+ }else if(tab==='daily'){app.innerHTML=header('Daily Planner','Your scheduled commitments and flexible to-dos in one place.')+`<div class="flex day-nav"><button class="secondary" id="previousDay">← Previous</button><button class="secondary" id="returnToday">Today</button><button class="secondary" id="followingDay">Next →</button></div>`+dayPlanner(viewDate);
+ }else if(tab==='weekly'){app.innerHTML=header('Weekly Planner','See your upcoming schedule at a glance.')+weekView();
+ }else if(tab==='dashboard'){
+ const active=state.tasks.filter(t=>!t.done).sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999'));
+ const count=progressionStats().tasks;
+ app.innerHTML=header('Your Adventure','Every real-world accomplishment moves you forward.')+`<div class="card"><div class="flex between"><div class="flex"><div class="avatar-mark" style="height:64px;width:64px;font-size:30px">${portraitMarkup()}</div><div><p class="muted">CHARACTER</p><h2>${esc(state.name)} · Level ${level(state.xp)}</h2><p class="quest-reward">${esc(state.equippedTitle||'')}</p></div></div><button class="secondary" id="rename">Rename</button><button class="secondary" id="goCharacter">Character Sheet</button></div>${progress(state.xp)}</div><div class="card"><div class="flex between"><h3>Today’s Plan</h3><button class="secondary" id="goDaily">Open Today</button></div><p class="muted small">${dayTasks(localToday()).length} tasks due or flexible today · ${completedOn(localToday())} completed today</p></div><div class="grid"><div class="card"><p class="muted">Task completions</p><div class="stat">${count}</div></div><div class="card"><p class="muted">Skills</p><div class="stat">${state.skills.length}</div></div><div class="card"><p class="muted">Total XP</p><div class="stat">${state.xp}</div></div></div><div class="card"><h3>Next Tasks</h3>${active.slice(0,5).map(taskRow).join('')||'<p class="muted">No active tasks. Add your first task!</p>'}<p><button class="secondary" id="goTasks">Manage tasks</button></p></div><div class="card"><h3>Attributes</h3><div class="grid">${state.attributes.map(a=>`<div><strong>${esc(a.name)}</strong><p class="muted small">Level ${level(a.xp)}</p>${progress(a.xp)}</div>`).join('')}</div></div>`;
+ }else if(tab==='tasks'){
+ const active=state.tasks.filter(t=>!t.done).sort((a,b)=>(a.due||'9999').localeCompare(b.due||'9999'));
+ const completed=state.tasks.filter(t=>t.done);
+ const categories=[...new Set(active.map(t=>t.category))].sort();
+ app.innerHTML=header('Tasks','Plan responsibilities, build habits, and train your character.')+`<div class="card"><div class="flex between"><h3 style="margin:0">Your Planner</h3><button id="newTask">+ Add Task</button></div><p class="muted small" style="margin:12px 0 0">Recurring tasks carry overdue work forward. Completing one schedules the next occurrence without creating a backlog.</p></div><div class="card"><div class="flex between"><h3>Active Tasks (${active.length})</h3><label>Category<select id="categoryFilter"><option value="all">All categories</option>${categories.map(c=>`<option value="${esc(c)}" ${taskFilter===c?'selected':''}>${esc(c)}</option>`).join('')}</select></label><label>Priority<select id="priorityFilter"><option value="all">All priorities</option>${['low','normal','high','urgent'].map(p=>`<option value="${p}" ${priorityFilter===p?'selected':''}>${p}</option>`).join('')}</select></label></div>${sortedTasks(active.filter(t=>(taskFilter==='all'||taskFilter==='active'||t.category===taskFilter)&&(priorityFilter==='all'||t.priority===priorityFilter))).map(taskRow).join('')||'<p class="muted empty">No tasks in this view.</p>'}</div><div class="card"><h3>Completed One-Time Tasks (${completed.length})</h3>${completed.map(taskRow).join('')||'<p class="muted">No completed one-time tasks yet. Recurring completions are tracked in History.</p>'}</div>`;
+ }else if(tab==='skills'||tab==='attributes'){
+ const isSkill=tab==='skills',items=isSkill?state.skills:state.attributes;
+ app.innerHTML=header(isSkill?'Skills':'Attributes',isSkill?'Develop hobbies and specialized abilities.':'Build your character through real-world training.')+(isSkill?`<div class="card"><h3>Add Skill</h3><form id="addCategory" class="form"><input name="name" maxlength="60" placeholder="e.g. Japanese" required><button>Add</button></form></div>`:'')+`<div class="grid">${items.map(x=>`<div class="card"><div class="flex between"><strong>${esc(x.name)}</strong><div class="flex"><span class="pill">Level ${level(x.xp)}</span>${isSkill?masteryBadge(level(x.xp)):''}</div></div><p></p>${progress(x.xp)}<div class="flex"><button data-train="${esc(x.id)}">Train</button>${isSkill?`<button class="secondary" data-remove="${esc(x.id)}">Remove</button>`:''}</div></div>`).join('')}</div><div class="card"><p class="muted small">Training awards character XP and XP to this ${isSkill?'skill':'attribute'}. Attributes are permanent and cannot be removed.</p></div>`;
+ }else{
+ app.innerHTML=header('Activity History','Every completed task and training session.')+`<div class="card">${state.history.map(h=>`<div class="item"><div><strong>${esc(h.title)}</strong><p class="muted small">${esc(h.category||'Activity')} · ${esc(h.detail||((h.awards||[]).map(x=>`+${x.xp} ${x.name} XP`).join(' · ')))}</p></div><span class="muted small">${new Date(h.at).toLocaleString()}</span></div>`).join('')||'<p class="muted">Your adventure begins with your first completed activity.</p>'}</div><div class="card"><div class="flex"><button class="secondary" id="export">Export Save (JSON)</button><button class="secondary" id="import">Import Save (JSON)</button><button class="danger" id="resetSave">Reset Save</button><input id="importFile" type="file" accept="application/json,.json" hidden></div><p class="muted small" style="margin-top:12px">Export before switching devices, browser profiles, or local server addresses. Import replaces your current progress.</p></div>`;
+ }
+ bind();
+}
+function closeModal(){document.getElementById('modalRoot').innerHTML=''}
+function showModal(content){
+ const root=document.getElementById('modalRoot');
+ root.innerHTML=`<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true">${content}</section></div>`;
+ root.querySelectorAll('[data-close-modal]').forEach(b=>b.onclick=closeModal);
+ root.querySelector('.modal-backdrop').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+function taskFields(t={}){
+ const categories=['Personal','Work','Hobbies','Health','Learning','Other'];
+ if(t.category&&!categories.includes(t.category))categories.push(t.category);
+ const selected=t.repeat||'none';
+ return `<div class="field-grid">
+ <label class="wide">Task name<input name="name" maxlength="100" value="${esc(t.name||'')}" required></label>
+ <label>Category<select name="category">${categories.map(c=>`<option value="${esc(c)}" ${c===(t.category||'Personal')?'selected':''}>${esc(c)}</option>`).join('')}</select></label>
+ <label>Difficulty<select name="difficulty"><option value="10" ${t.xp===10?'selected':''}>Easy · 10 XP</option><option value="30" ${!t.xp||t.xp===30?'selected':''}>Normal · 30 XP</option><option value="60" ${t.xp===60?'selected':''}>Hard · 60 XP</option><option value="100" ${t.xp===100?'selected':''}>Epic · 100 XP</option></select></label>
+ <label>XP override (optional)<input name="override" type="number" min="1" max="1000" placeholder="Use difficulty XP" value="${t.xp&&![10,30,60,100].includes(t.xp)?t.xp:''}"></label>
+ <label>Priority<select name="priority">${['low','normal','high','urgent'].map(p=>`<option value="${p}" ${(t.priority||'normal')===p?'selected':''}>${p[0].toUpperCase()+p.slice(1)}</option>`).join('')}</select></label>
+ <label>Due date<input name="due" type="date" value="${esc(t.due||'')}"></label>
+ <label>Start time (optional)<input name="time" type="time" value="${esc(t.time||'')}"></label>
+ <label>Estimated duration (minutes)<input name="duration" type="number" min="0" max="1440" value="${Number(t.duration)||0}"></label>
+ <label>Repeat<select name="repeat" id="taskRepeat"><option value="none" ${selected==='none'?'selected':''}>Does not repeat</option><option value="daily" ${selected==='daily'?'selected':''}>Daily</option><option value="weekly" ${selected==='weekly'?'selected':''}>Weekly</option><option value="custom" ${selected==='custom'?'selected':''}>Custom</option></select></label>
+ <label id="taskIntervalField" ${selected==='custom'?'':'hidden'}>Repeat interval (days)<input name="interval" type="number" min="1" max="365" value="${Number(t.interval)||2}" ${selected==='custom'?'required':'disabled'}></label>
+ <label>Skill<select name="skill">${options(state.skills,t.skill)}</select></label>
+ <label>Attribute<select name="attribute">${options(state.attributes,t.attribute)}</select></label>
+ </div>`;
+}
+function openTaskEditor(t){if(t&&t.__new){t=null}
+ showModal(`<h2>${t?'Edit Task':'Add Task'}</h2><p class="muted small">A completed activity earns character XP plus 70% skill XP and 40% attribute XP when linked.</p><form id="taskEditor">${taskFields(t)}<div class="modal-actions"><button type="button" class="secondary" data-close-modal>Cancel</button><button type="submit">${t?'Save Changes':'Add Task'}</button></div></form>`);
+ const repeatSelect=document.getElementById('taskRepeat'),intervalField=document.getElementById('taskIntervalField'),intervalInput=intervalField.querySelector('input');
+ const updateInterval=()=>{const custom=repeatSelect.value==='custom';intervalField.hidden=!custom;intervalInput.disabled=!custom;intervalInput.required=custom};
+ repeatSelect.addEventListener('change',updateInterval);updateInterval();
+ document.getElementById('taskEditor').onsubmit=e=>{
+  e.preventDefault();const f=new FormData(e.currentTarget);
+  const name=String(f.get('name')).trim(),raw=String(f.get('override')).trim(),xp=raw?Number(raw):Number(f.get('difficulty')),repeat=String(f.get('repeat')),interval=repeat==='custom'?Number(f.get('interval')):Math.max(1,Number(t?.interval)||2);
+  if(!name||!Number.isInteger(xp)||xp<1||xp>1000)return toast('Enter a task name and XP between 1 and 1000');
+  if(repeat==='custom'&&(!Number.isInteger(interval)||interval<1||interval>365))return toast('Repeat interval must be 1–365 days');
+  const due=String(f.get('due'))||(repeat!=='none'?localToday():'');
+  const changes={name,xp,priority:String(f.get('priority')),time:String(f.get('time')),duration:Number(f.get('duration'))||0,category:String(f.get('category')),skill:String(f.get('skill')),attribute:String(f.get('attribute')),due,repeat,interval};
+  if(t)Object.assign(t,changes);else state.tasks.push({id:id(),...changes,done:false,completedCount:0});
+  save();closeModal();render();toast(t?'Task updated':'Task added');
+ };
+}
+function bind(){
+ bindQuests();
+ const portraitButton=document.getElementById('uploadPortrait'),portraitInput=document.getElementById('portraitFile');
+ if(portraitButton&&portraitInput)portraitButton.onclick=()=>portraitInput.click();
+ if(portraitInput)portraitInput.onchange=async()=>{
+  const file=portraitInput.files&&portraitInput.files[0];if(!file)return;
+  if(!['image/png','image/jpeg','image/webp'].includes(file.type)){toast('Choose a PNG, JPG, or WebP image');return}
+  if(file.size>12*1024*1024){toast('Choose an image smaller than 12 MB');return}
+  try{
+   const bitmap=await createImageBitmap(file),canvas=document.createElement('canvas');
+   canvas.width=320;canvas.height=320;
+   const ctx=canvas.getContext('2d');if(!ctx)throw Error('Canvas unavailable');
+   const side=Math.min(bitmap.width,bitmap.height),sx=(bitmap.width-side)/2,sy=(bitmap.height-side)/2;
+   ctx.drawImage(bitmap,sx,sy,side,side,0,0,320,320);bitmap.close?.();
+   const portrait=canvas.toDataURL('image/jpeg',0.8);
+   const previous=state.portrait;state.portrait=portrait;
+   try{save()}catch(e){state.portrait=previous;toast('Browser storage is full; export your save and try a smaller image');return}
+   render();toast('Portrait updated');
+  }catch(e){toast('Unable to process this image')}
+ };
+ const removePortrait=document.getElementById('removePortrait');if(removePortrait)removePortrait.onclick=()=>{state.portrait='';save();render();toast('Portrait removed')};
+ const equip=document.getElementById('equipTitle');if(equip)equip.onchange=()=>{const title=equip.value;if(title&&!earnedAchievements().some(a=>a.title===title))return;state.equippedTitle=title;save();render();toast(title?'Title equipped':'Title unequipped')};
+ document.querySelectorAll('[data-achievement-filter]').forEach(b=>b.onclick=()=>{achievementFilter=b.dataset.achievementFilter;render()});
+ const viewAchievements=document.getElementById('viewAchievements');if(viewAchievements)viewAchievements.onclick=()=>{tab='achievements';render()};
+ const goCharacter=document.getElementById('goCharacter');if(goCharacter)goCharacter.onclick=()=>{tab='character';render()};
+ const profileRename=document.getElementById('profileRename');if(profileRename)profileRename.onclick=()=>{tab='dashboard';render();document.getElementById('rename')?.click()};
+ document.querySelectorAll('[data-complete]').forEach(b=>b.onclick=()=>completeTask(state.tasks.find(t=>t.id===b.dataset.complete)));
+ document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openTaskEditor(state.tasks.find(t=>t.id===b.dataset.edit)));
+ document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>{
+  const t=state.tasks.find(t=>t.id===b.dataset.delete);if(!t)return;
+  showModal(`<h2>Delete ${esc(t.name)}?</h2><p class="muted">This removes the task, but previous XP and activity history remain.</p><div class="modal-actions"><button class="secondary" data-close-modal>Cancel</button><button class="danger" id="confirmDelete">Delete</button></div>`);
+  document.getElementById('confirmDelete').onclick=()=>{state.tasks=state.tasks.filter(x=>x.id!==t.id);save();closeModal();render();toast('Task deleted')};
+ });
+ const newTask=document.getElementById('newTask');if(newTask)newTask.onclick=()=>openTaskEditor();
+ const plannerNew=document.getElementById('plannerNew');if(plannerNew)plannerNew.onclick=()=>openTaskEditor();
+ const quick=document.getElementById('quickAdd');if(quick)quick.onsubmit=e=>{e.preventDefault();const name=String(new FormData(quick).get('name')).trim();if(!name)return;state.tasks.push({id:id(),name,category:'Personal',repeat:'none',interval:1,done:false,skill:'',attribute:'',xp:30,due:localToday(),priority:'normal',time:'',duration:0});save();render();toast('Task added')};
+ for(const [selector,delta] of [['previousDay',-1],['followingDay',1]]){const el=document.getElementById(selector);if(el)el.onclick=()=>{viewDate=nextDate(viewDate,delta);render()}}
+ const returnToday=document.getElementById('returnToday');if(returnToday)returnToday.onclick=()=>{viewDate=localToday();render()};
+ const goDaily=document.getElementById('goDaily');if(goDaily)goDaily.onclick=()=>{viewDate=localToday();tab='daily';render()};
+ for(const [selector,delta] of [['prevWeek',-1],['nextWeek',1]]){const el=document.getElementById(selector);if(el)el.onclick=()=>{weekOffset+=delta;render()}}
+ const thisWeek=document.getElementById('thisWeek');if(thisWeek)thisWeek.onclick=()=>{weekOffset=0;render()};
+ document.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>{viewDate=b.dataset.day;tab='daily';render()});
+ const filter=document.getElementById('categoryFilter');if(filter)filter.onchange=()=>{taskFilter=filter.value;render()};
+ const pf=document.getElementById('priorityFilter');if(pf)pf.onchange=()=>{priorityFilter=pf.value;render()};
+ const add=document.getElementById('addCategory');if(add)add.onsubmit=e=>{
+  e.preventDefault();const name=String(new FormData(add).get('name')).trim(),items=state.skills;
+  if(!name||items.some(x=>x.name.toLowerCase()===name.toLowerCase()))return toast('Name already exists or is empty');
+  items.push({id:id(),name,xp:0});save();render();
+ };
+ document.querySelectorAll('[data-train]').forEach(b=>b.onclick=()=>{
+  const key=tab==='skills'?'skills':'attributes',item=state[key].find(x=>x.id===b.dataset.train);if(!item)return;
+  showModal(`<h2>Train ${esc(item.name)}</h2><p class="muted">Log a training session. Both your character and this ${key==='skills'?'skill':'attribute'} earn the full XP shown.</p><form id="trainingForm"><div class="field-grid"><label>Effort<select name="effort"><option value="10">Easy · 10 XP</option><option value="30" selected>Normal · 30 XP</option><option value="60">Hard · 60 XP</option><option value="100">Epic · 100 XP</option></select></label><label>XP override<input name="override" type="number" min="1" max="1000" placeholder="Use effort XP"></label></div><div class="modal-actions"><button type="button" class="secondary" data-close-modal>Cancel</button><button type="submit">Complete Training</button></div></form>`);
+  document.getElementById('trainingForm').onsubmit=e=>{
+   e.preventDefault();const f=new FormData(e.currentTarget),raw=String(f.get('override')).trim(),xp=raw?Number(raw):Number(f.get('effort'));
+   if(!Number.isInteger(xp)||xp<1||xp>1000)return toast('Enter whole XP between 1 and 1000');
+   const before=level(item.xp);reward(`Trained ${item.name}`,xp,key==='skills'?item.id:null,key==='attributes'?item.id:null,'Training',true);
+   closeModal();render();if(level(item.xp)>before)toast(`${item.name} reached Level ${level(item.xp)}!`);
+  };
+ });
+ // Only skills may be removed. Attributes have no remove button or handler.
+ document.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{
+  const item=state.skills.find(x=>x.id===b.dataset.remove);if(!item)return;
+  showModal(`<h2>Remove ${esc(item.name)}?</h2><p class="muted">This removes the skill and its XP. Past history is retained.</p><div class="modal-actions"><button class="secondary" data-close-modal>Cancel</button><button class="danger" id="confirmRemove">Remove</button></div>`);
+  document.getElementById('confirmRemove').onclick=()=>{state.skills=state.skills.filter(x=>x.id!==item.id);state.tasks.forEach(t=>{if(t.skill===item.id)t.skill=''});save();closeModal();render();toast('Skill removed')};
+ });
+ const rename=document.getElementById('rename');if(rename)rename.onclick=()=>{
+  showModal(`<h2>Rename Character</h2><form id="renameForm"><label>Name<input name="name" maxlength="60" value="${esc(state.name)}" required></label><div class="modal-actions"><button type="button" class="secondary" data-close-modal>Cancel</button><button>Save</button></div></form>`);
+  document.getElementById('renameForm').onsubmit=e=>{e.preventDefault();const name=String(new FormData(e.currentTarget).get('name')).trim();if(!name)return;state.name=name;save();closeModal();render()};
+ };
+ const go=document.getElementById('goTasks');if(go)go.onclick=()=>{tab='tasks';render()};
+ const ex=document.getElementById('export');if(ex)ex.onclick=()=>{
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='ascend-save.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ };
+ const reset=document.getElementById('resetSave');if(reset)reset.onclick=()=>{
+  showModal(`<h2>Reset All Progress?</h2><p class="muted">This permanently wipes the character, XP, tasks, quests, skills, attributes and activity history stored in this browser. Export your save first if you want to restore it later.</p><p class="muted">Type <strong>RESET</strong> to enable the wipe.</p><form id="resetForm"><label>Confirmation<input name="confirmation" autocomplete="off" placeholder="RESET" required></label><div class="modal-actions"><button type="button" class="secondary" data-close-modal>Cancel</button><button type="submit" class="danger" id="confirmReset" disabled>Reset Everything</button></div></form>`);
+  const form=document.getElementById('resetForm'),input=form.elements.confirmation,button=document.getElementById('confirmReset');
+  input.oninput=()=>{button.disabled=input.value.trim()==='RESET'?false:true};
+  form.onsubmit=e=>{e.preventDefault();if(input.value.trim()!=='RESET')return;state=fresh();normalize();save();tab='dashboard';taskFilter='active';priorityFilter='all';statusFilter='active';viewDate=localToday();weekOffset=0;closeModal();render();toast('Save reset — new adventure started')};
+ };
+ const imp=document.getElementById('import');if(imp)imp.onclick=()=>document.getElementById('importFile').click();
+ const file=document.getElementById('importFile');if(file)file.onchange=async()=>{
+  try{
+   const data=JSON.parse(await file.files[0].text());
+   if(!data||typeof data!=='object'||!Array.isArray(data.tasks)||!Array.isArray(data.skills)||!Array.isArray(data.attributes)||!Array.isArray(data.history)||!Number.isFinite(Number(data.xp)))throw Error('Invalid Ascend save');
+   showModal(`<h2>Replace current save?</h2><p class="muted">Importing this file replaces all progress currently stored in this browser. Export your existing save first if needed.</p><div class="modal-actions"><button class="secondary" data-close-modal>Cancel</button><button id="confirmImport">Import Save</button></div>`);
+   document.getElementById('confirmImport').onclick=()=>{state=data;normalize();save();closeModal();render();toast('Save imported')};
+  }catch(err){toast('Could not import: invalid JSON save')}
+ };
+}
+const layout=document.getElementById('layout'),menuToggle=document.getElementById('menuToggle'),menuScrim=document.getElementById('menuScrim');
+function setMenu(open){layout.classList.toggle('menu-closed',!open);menuToggle.setAttribute('aria-expanded',String(open));menuScrim.classList.toggle('hidden',!open||window.innerWidth>760)}
+menuToggle.onclick=()=>setMenu(layout.classList.contains('menu-closed'));
+menuScrim.onclick=()=>setMenu(false);
+document.querySelectorAll('.nav,.quick-nav').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;setMenu(false);render()});
+window.addEventListener('resize',()=>{menuScrim.classList.toggle('hidden',layout.classList.contains('menu-closed')||window.innerWidth>760)});
+render();
+
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(err => console.warn('Ascend offline support unavailable:', err));
+  });
+}
+</script></body></html>
